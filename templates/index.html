@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todo App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 40px 16px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px #ddd;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .add-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .actions form {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h1>Todo List</h1>
+
+    <form class="add-form" action="/add" method="POST">
+        <input
+            type="text"
+            name="title"
+            placeholder="Новая задача"
+            maxlength="255"
+            required
+        >
+        <button type="submit">Добавить</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+        <li>
+            <span class="{% if task.completed %}completed{% endif %}">
+                {{ task.title }}
+            </span>
+
+            <div class="actions">
+                {% if not task.completed %}
+                <form action="/complete/{{ task.id }}" method="POST">
+                    <button type="submit">✓</button>
+                </form>
+                {% endif %}
+
+                <form action="/delete/{{ task.id }}" method="POST">
+                    <button type="submit">✕</button>
+                </form>
+            </div>
+        </li>
+        {% else %}
+        <li>Пока нет задач</li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
